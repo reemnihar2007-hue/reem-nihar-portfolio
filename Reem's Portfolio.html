@@ -48,6 +48,13 @@ section {
     scroll-margin-top: 82px;
 }
 
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
 h1,
 h2,
 h3,
@@ -533,6 +540,12 @@ nav {
         0 18px 38px rgba(8,43,73,.16);
 }
 
+.button:active {
+    transform: translateY(-1px);
+
+    transition-duration: .1s;
+}
+
 
 /* =========================================================
    HERO FINANCE CARD
@@ -1016,8 +1029,8 @@ nav {
 .skills {
     background:
         conic-gradient(
-            var(--blue) 0deg,
-            #e4eaf0 0deg
+            var(--blue) 300deg,
+            #e4eaf0 300deg
         );
 }
 
@@ -1622,6 +1635,8 @@ nav {
     font-size: 10px;
 
     font-weight: 800;
+
+    transition: .25s ease;
 }
 
 .project:nth-child(2) .tag {
@@ -1665,6 +1680,12 @@ nav {
 
     box-shadow:
         0 10px 25px rgba(40,120,212,.22);
+}
+
+.project-button:active {
+    transform: translateY(-1px);
+
+    transition-duration: .1s;
 }
 
 
@@ -1993,6 +2014,12 @@ nav {
         0 10px 25px rgba(0,119,181,.25);
 }
 
+.linkedin-button:active {
+    transform: translateY(-1px);
+
+    transition-duration: .1s;
+}
+
 
 /* =========================================================
    FOOTER
@@ -2030,6 +2057,32 @@ footer {
 
     transform: translateY(0);
 }
+
+.reveal .project,
+.reveal .interest-card {
+    opacity: 0;
+
+    transform: translateY(18px);
+
+    transition:
+        opacity .6s ease,
+        transform .6s ease;
+}
+
+.reveal.visible .project,
+.reveal.visible .interest-card {
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+.reveal.visible .project:nth-child(1) { transition-delay: .08s; }
+.reveal.visible .project:nth-child(2) { transition-delay: .18s; }
+
+.reveal.visible .interest-card:nth-child(1) { transition-delay: .06s; }
+.reveal.visible .interest-card:nth-child(2) { transition-delay: .14s; }
+.reveal.visible .interest-card:nth-child(3) { transition-delay: .22s; }
+.reveal.visible .interest-card:nth-child(4) { transition-delay: .30s; }
 
 
 /* =========================================================
@@ -2203,6 +2256,10 @@ footer {
         position: sticky;
     }
 
+    section {
+        scroll-margin-top: 74px;
+    }
+
     .menu-toggle {
         display: flex;
     }
@@ -2295,6 +2352,33 @@ footer {
     .nav-links a::after {
         display: none;
     }
+
+    .nav-links a {
+        opacity: 0;
+
+        transform: translateX(12px);
+
+        transition:
+            opacity .3s ease,
+            transform .3s ease,
+            background .25s ease;
+    }
+
+    .nav-links.active a {
+        opacity: 1;
+
+        transform: translateX(0);
+    }
+
+    .nav-links.active a:nth-child(1) { transition-delay: .05s; }
+    .nav-links.active a:nth-child(2) { transition-delay: .09s; }
+    .nav-links.active a:nth-child(3) { transition-delay: .13s; }
+    .nav-links.active a:nth-child(4) { transition-delay: .17s; }
+    .nav-links.active a:nth-child(5) { transition-delay: .21s; }
+    .nav-links.active a:nth-child(6) { transition-delay: .25s; }
+    .nav-links.active a:nth-child(7) { transition-delay: .29s; }
+    .nav-links.active a:nth-child(8) { transition-delay: .33s; }
+    .nav-links.active a:nth-child(9) { transition-delay: .37s; }
 
 
     /* HERO */
@@ -3001,7 +3085,7 @@ footer {
 
     <!-- FINANCE DECORATION -->
 
-    <div class="hero-finance-card">
+    <div class="hero-finance-card" aria-hidden="true">
 
         <div class="finance-top">
 
@@ -3010,7 +3094,7 @@ footer {
             </div>
 
             <div class="finance-value">
-                +
+                ↗
             </div>
 
         </div>
