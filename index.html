@@ -1021,8 +1021,8 @@ nav {
 .knowledge {
     background:
         conic-gradient(
-            var(--gold) 300deg,
-            #e4eaf0 300deg
+            var(--gold) 360deg,
+            #e4eaf0 0deg
         );
 }
 
@@ -2972,6 +2972,93 @@ footer {
     word-break: normal;
 }
 
+
+/* =========================================================
+   PROJECTS CAROUSEL (PHONE)
+========================================================= */
+
+.carousel-controls {
+    display: none;
+}
+
+@media (max-width: 720px) {
+
+    .project-grid {
+        display: flex;
+        grid-template-columns: none;
+        gap: 14px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 10px 2px 22px;
+        margin: 0 -2px;
+    }
+
+    .project-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .project-grid .project {
+        flex: 0 0 100%;
+        min-width: 0;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+    }
+
+    .carousel-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        margin-top: 6px;
+    }
+
+    .carousel-arrow {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid var(--light-border);
+        background: white;
+        color: var(--navy);
+        font-size: 18px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(8,43,73,.08);
+        transition: .25s ease;
+    }
+
+    .carousel-arrow:active {
+        background: var(--blue);
+        color: white;
+    }
+
+    .carousel-arrow:disabled {
+        opacity: .35;
+    }
+
+    .carousel-dots {
+        display: flex;
+        gap: 8px;
+    }
+
+    .carousel-dot {
+        width: 9px;
+        height: 9px;
+        padding: 0;
+        border: none;
+        border-radius: 999px;
+        background: #c3d3e3;
+        cursor: pointer;
+        transition: .3s ease;
+    }
+
+    .carousel-dot.active {
+        width: 26px;
+        background: var(--blue);
+    }
+}
+
 </style>
 </head>
 
@@ -3279,7 +3366,7 @@ footer {
             <div class="acca-circle knowledge">
 
                 <span>
-                    Exemptions
+                    Completed
                 </span>
 
             </div>
@@ -3731,7 +3818,7 @@ footer {
     </p>
 
 
-    <div class="project-grid">
+    <div class="project-grid" id="projectGrid">
 
 
         <!-- PROJECT 1 -->
@@ -3894,6 +3981,19 @@ footer {
             </a>
 
         </article>
+
+    </div>
+
+
+    <!-- PHONE CAROUSEL CONTROLS -->
+
+    <div class="carousel-controls" id="carouselControls">
+
+        <button class="carousel-arrow" id="projPrev" aria-label="Previous project">&#8592;</button>
+
+        <div class="carousel-dots" id="projDots"></div>
+
+        <button class="carousel-arrow" id="projNext" aria-label="Next project">&#8594;</button>
 
     </div>
 
@@ -4336,6 +4436,79 @@ window.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   PROJECTS CAROUSEL (PHONE)
+========================================================= */
+
+const projGrid = document.getElementById("projectGrid");
+const projDots = document.getElementById("projDots");
+const projPrev = document.getElementById("projPrev");
+const projNext = document.getElementById("projNext");
+
+if (projGrid && projDots && projPrev && projNext) {
+
+    const projCards = projGrid.querySelectorAll(".project");
+
+    projCards.forEach((card, index) => {
+
+        const dot = document.createElement("button");
+
+        dot.className = "carousel-dot";
+
+        dot.setAttribute("aria-label", "Go to project " + (index + 1));
+
+        dot.addEventListener("click", () => goToProject(index));
+
+        projDots.appendChild(dot);
+
+    });
+
+    function currentProject() {
+
+        const cardWidth = projCards[0].offsetWidth + 14;
+
+        return Math.round(projGrid.scrollLeft / cardWidth);
+
+    }
+
+    function goToProject(index) {
+
+        const cardWidth = projCards[0].offsetWidth + 14;
+
+        projGrid.scrollTo({
+            left: index * cardWidth,
+            behavior: "smooth"
+        });
+
+    }
+
+    function updateCarousel() {
+
+        const index = Math.min(
+            Math.max(currentProject(), 0),
+            projCards.length - 1
+        );
+
+        projDots.querySelectorAll(".carousel-dot").forEach((dot, i) => {
+            dot.classList.toggle("active", i === index);
+        });
+
+        projPrev.disabled = index === 0;
+        projNext.disabled = index === projCards.length - 1;
+
+    }
+
+    projPrev.addEventListener("click", () => goToProject(currentProject() - 1));
+    projNext.addEventListener("click", () => goToProject(currentProject() + 1));
+
+    projGrid.addEventListener("scroll", updateCarousel, { passive: true });
+    window.addEventListener("resize", updateCarousel);
+
+    updateCarousel();
+
+}
 
 </script>
 
